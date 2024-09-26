@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Store.Data.Contexts;
 using Store.Repository;
 using Store.Repository.Interfaces;
+using Store.Repository.Repositories;
+using Store.Service.Services.ProductService;
+using Store.Service.Services.ProductService.Dtos;
 using Store.Web.Helper;
 
 namespace Store.Web
@@ -23,11 +26,12 @@ namespace Store.Web
                     ?? throw new InvalidOperationException("No Connection Established"));
             });
 
-            builder.Services.AddScoped<IUnitOfWork, IUnitOfWork>();
-
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddAutoMapper(typeof(ProductProfile));
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<IProductService, ProductService>();
 
             var app = builder.Build();
 

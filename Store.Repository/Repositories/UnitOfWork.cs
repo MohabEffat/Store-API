@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Store.Repository.Repositories
 {
-    internal class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly StoreDbContext _context;
         private Hashtable? _repositories;
@@ -25,14 +25,14 @@ namespace Store.Repository.Repositories
 
         public IGenericRepository<TEntity, TKey> Repository<TEntity, TKey>() where TEntity : BaseEntity<TKey>
         {
-            if (_repositories == null)
+            if (_repositories is null)
                 _repositories = new Hashtable();
 
             var entityKey = typeof(TEntity).Name;
 
             if (!_repositories.ContainsKey(entityKey))
             {
-                var repositoryType = typeof(IGenericRepository<,>);
+                var repositoryType = typeof(GenericRepository<,>);
 
                 var repositoryInstance = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(TEntity), typeof(TKey)), _context);
 
