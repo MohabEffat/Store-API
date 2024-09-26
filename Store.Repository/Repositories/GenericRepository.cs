@@ -35,8 +35,6 @@ namespace Store.Repository.Repositories
             => await _context.Set<TEntity>().FindAsync(id);
         //public async Task<TEntity> GetByIdAsNoTrackingAsync(TKey? id)
         //    => await _context.Set<TEntity>().AsNoTracking().FindAsync(id);
-
-
         public void UpdateAsync(TEntity entity)
             => _context.Set<TEntity>().Update(entity);
     }
