@@ -20,10 +20,17 @@ namespace Store.Web
             builder.Services.AddDbContext<StoreDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
-                    ?? throw new InvalidOperationException("No Connection Established"));
+                    ?? throw new InvalidOperationException("No Connection Established For Store"));
+            });
+            
+            builder.Services.AddDbContext<StoreIdentityDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection")
+                    ?? throw new InvalidOperationException("No Connection Established For Identity"));
             });
 
             builder.Services.AddApplicationServices();
+            builder.Services.AddIdentityServices();
             builder.Services.AddSingleton<IConnectionMultiplexer>(config =>
             {
                 var conn = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"));
@@ -49,8 +56,9 @@ namespace Store.Web
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseAuthentication();
 
+            app.UseAuthorization();
 
             app.MapControllers();
 
