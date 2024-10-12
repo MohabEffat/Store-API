@@ -8,6 +8,8 @@ using Store.Service.Services.CacheService;
 using Store.Service.Services.BasketService.DTOs;
 using Store.Service.Services.BasketService;
 using Store.Repository.Basket;
+using Store.Service.Services.TokenService;
+using Store.Service.Services.UserService;
 
 namespace Store.Web.Extensions
 {
@@ -23,6 +25,8 @@ namespace Store.Web.Extensions
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<ICacheService, CacheService>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserService, UserService>();
 
             services.Configure<ApiBehaviorOptions>(options =>
             {
@@ -30,7 +34,7 @@ namespace Store.Web.Extensions
                 {
                     var errors = actionContext.ModelState
                                 .Where(model => model.Value?.Errors.Count() > 0)
-                                .SelectMany(model => model.Value.Errors)
+                                .SelectMany(model => model.Value!.Errors)
                                 .Select(error => error.ErrorMessage).ToList();
 
                     var errorRespone = new ValidationErrorResopnse { Errors = errors };
@@ -38,8 +42,10 @@ namespace Store.Web.Extensions
                     return new BadRequestObjectResult(errorRespone);
                 };
             });
+
             return services;
 
         }
     }
 }
+ 

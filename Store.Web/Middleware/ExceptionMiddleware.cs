@@ -37,6 +37,7 @@ namespace Store.Web.Middleware
                     : new CustomeException((int)HttpStatusCode.InternalServerError);
 
                 var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+
                 var json = JsonSerializer.Serialize(respone, options);
 
                 await context.Response.WriteAsync(json);
