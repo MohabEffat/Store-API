@@ -12,7 +12,7 @@ namespace Store.Repository
     {
         public static async Task SeedUserAsync(UserManager<AppUser> userManager)
         {
-            if (userManager.Users.Any())
+            if (!userManager.Users.Any())
             {
                 var user = new AppUser
                 {

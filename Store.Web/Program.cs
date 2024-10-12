@@ -30,16 +30,18 @@ namespace Store.Web
             });
 
             builder.Services.AddApplicationServices();
-            builder.Services.AddIdentityServices();
+
+            builder.Services.AddIdentityServices(builder.Configuration);
+
             builder.Services.AddSingleton<IConnectionMultiplexer>(config =>
             {
-                var conn = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"));
+                var conn = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis")!);
                 return ConnectionMultiplexer.Connect(conn);
             });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerDocumentation();
 
             var app = builder.Build();
 
