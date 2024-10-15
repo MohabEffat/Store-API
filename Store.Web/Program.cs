@@ -1,9 +1,9 @@
-
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 using Store.Data.Contexts;
-using Store.Repository;
-using Store.Repository.Interfaces;
+using Store.Web.Extensions;
 using Store.Web.Helper;
+using Store.Web.Middleware;
 
 namespace Store.Web
 {
@@ -20,14 +20,38 @@ namespace Store.Web
             builder.Services.AddDbContext<StoreDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
-                    ?? throw new InvalidOperationException("No Connection Established"));
+                    ?? throw new InvalidOperationException("No Connection Established For Store"));
+            });
+            
+            builder.Services.AddDbContext<StoreIdentityDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection")
+                    ?? throw new InvalidOperationException("No Connection Established For Identity"));
             });
 
-            builder.Services.AddScoped<IUnitOfWork, IUnitOfWork>();
+            builder.Services.AddApplicationServices();
+
+            builder.Services.AddIdentityServices(builder.Configuration);
+
+            builder.Services.AddSingleton<IConnectionMultiplexer>(config =>
+            {
+                var conn = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis")!);
+                return ConnectionMultiplexer.Connect(conn);
+            });
+
+            builder.Services.AddCors(options =>
+            {
+
+                options.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("");
+                });
+
+            });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerDocumentation();
 
             var app = builder.Build();
 
@@ -40,11 +64,15 @@ namespace Store.Web
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseAuthentication();
+            
+            app.UseCors("CorsPolicy");
 
+            app.UseAuthorization();
 
             app.MapControllers();
 

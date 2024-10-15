@@ -7,6 +7,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\images\products\CheesyVegetableLasagna.png" />
+    <Content Remove="wwwroot\images\products\ChickenMarsala.png" />
+    <Content Remove="wwwroot\images\products\ChickenTeriyakiNoodles.png" />
+    <Content Remove="wwwroot\images\products\ChickenTikkaMasala.jpg" />
+    <Content Remove="wwwroot\images\products\Congee.png" />
+    <Content Remove="wwwroot\images\products\CreamyGochujangTortellini.png" />
+    <Content Remove="wwwroot\images\products\CrispyVegetablePakoras.png" />
+    <Content Remove="wwwroot\images\products\HaluskiNoodles.png" />
+    <Content Remove="wwwroot\images\products\HeartyVegetableLasagna.png" />
+    <Content Remove="wwwroot\images\products\ItalianChickenMarinade.png" />
+    <Content Remove="wwwroot\images\products\ItalianWeddingSoup.png" />
+    <Content Remove="wwwroot\images\products\Kulfi.png" />
+    <Content Remove="wwwroot\images\products\PastaSalad.png" />
+    <Content Remove="wwwroot\images\products\PepperPasta.png" />
+    <Content Remove="wwwroot\images\products\ShrimpEggFooYoung.png" />
+    <Content Remove="wwwroot\images\products\TandooriChicken.png" />
+    <Content Remove="wwwroot\images\products\VegetarianKorma.png" />
+    <Content Remove="wwwroot\images\products\VegetarianRefriedBeans.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -16,6 +38,27 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Store.Service\Store.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\images\products\CheesyVegetableLasagna.png" />
+    <None Include="wwwroot\images\products\ChickenMarsala.png" />
+    <None Include="wwwroot\images\products\ChickenTeriyakiNoodles.png" />
+    <None Include="wwwroot\images\products\ChickenTikkaMasala.jpg" />
+    <None Include="wwwroot\images\products\Congee.png" />
+    <None Include="wwwroot\images\products\CreamyGochujangTortellini.png" />
+    <None Include="wwwroot\images\products\CrispyVegetablePakoras.png" />
+    <None Include="wwwroot\images\products\HaluskiNoodles.png" />
+    <None Include="wwwroot\images\products\HeartyVegetableLasagna.png" />
+    <None Include="wwwroot\images\products\ItalianChickenMarinade.png" />
+    <None Include="wwwroot\images\products\ItalianWeddingSoup.png" />
+    <None Include="wwwroot\images\products\Kulfi.png" />
+    <None Include="wwwroot\images\products\PastaSalad.png" />
+    <None Include="wwwroot\images\products\PepperPasta.png" />
+    <None Include="wwwroot\images\products\ShrimpEggFooYoung.png" />
+    <None Include="wwwroot\images\products\TandooriChicken.png" />
+    <None Include="wwwroot\images\products\VegetarianKorma.png" />
+    <None Include="wwwroot\images\products\VegetarianRefriedBeans.png" />
   </ItemGroup>
 
 </Project>
