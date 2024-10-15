@@ -12,6 +12,7 @@ using Store.Service.Services.TokenService;
 using Store.Service.Services.UserService;
 using Store.Service.Services.OrderService.DTOs;
 using Store.Service.Services.OrderService;
+using Store.Service.Services.PaymentService;
 
 namespace Store.Web.Extensions
 {
@@ -19,11 +20,11 @@ namespace Store.Web.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(typeof(ProductProfile));
             services.AddAutoMapper(typeof(BasketProfile));
             services.AddAutoMapper(typeof(OrderProfile));
 
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<IBasketService, BasketService>();
@@ -31,6 +32,7 @@ namespace Store.Web.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IPaymentService, PaymentService>();
 
             services.Configure<ApiBehaviorOptions>(options =>
             {

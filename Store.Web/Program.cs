@@ -39,6 +39,16 @@ namespace Store.Web
                 return ConnectionMultiplexer.Connect(conn);
             });
 
+            builder.Services.AddCors(options =>
+            {
+
+                options.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("");
+                });
+
+            });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerDocumentation();
@@ -59,6 +69,8 @@ namespace Store.Web
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
+            
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 

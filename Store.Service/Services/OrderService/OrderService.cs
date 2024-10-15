@@ -5,11 +5,14 @@ using Store.Repository.Interfaces;
 using Store.Repository.Specs.OrderSpecs;
 using Store.Service.Services.BasketService;
 using Store.Service.Services.OrderService.DTOs;
+using Store.Service.Services.PaymentService;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Product = Store.Data.Entities.Product;
 
 namespace Store.Service.Services.OrderService
 {
@@ -18,15 +21,18 @@ namespace Store.Service.Services.OrderService
         private readonly IBasketService _basketService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IPaymentService _paymentService;
 
         public OrderService(
             IBasketService basketService,
             IUnitOfWork unitOfWork,
-            IMapper mapper)
+            IMapper mapper,
+            IPaymentService paymentService)
         {
             _basketService = basketService;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _paymentService = paymentService;
         }
         public async Task<OrderDetailsDto> CreateOrderAsync(OrderDto input)
         {
@@ -78,6 +84,17 @@ namespace Store.Service.Services.OrderService
             var Subtotal = orderItems.Sum(item => item.Quantity * item.Price);
             #endregion
 
+            #region To Do => Payment
+
+            var spec = new OrderWithPaymentIntentSpecifications(basket.PaymentIntentId);
+
+            var existingOrder = await _unitOfWork.Repository<Order, Guid>().GetWithSpecificationsByIdAsync(spec);
+
+            if (existingOrder is null)
+                await _paymentService.CreateOrUpdatePaymentIntent(basket);
+
+            #endregion
+
             #region Create Order
             var mappedShippingAddress = _mapper.Map<ShippingAddress>(input.ShippingAddreess);
 
@@ -90,7 +107,9 @@ namespace Store.Service.Services.OrderService
                 BuyerEmail = input.BuyerEmail,
                 BasketId = input.BasketId,
                 Items = mappedOrderItems,
-                SubTotal = Subtotal
+                SubTotal = Subtotal,
+                PaymentIntentId = basket.PaymentIntentId
+                
             };
 
             await _unitOfWork.Repository<Order, Guid>().AddAsync(order);
@@ -111,7 +130,7 @@ namespace Store.Service.Services.OrderService
             var orders = await _unitOfWork.Repository<Order, Guid>().GetAllWithSpecificationsAsync(specs);
 
             if (!orders.Any())
-                throw new Exception("You Dont Have Any Orders YET");
+                throw new Exception("You Don't Have Any Orders YET");
 
             var mappedOrders = _mapper.Map<List<OrderDetailsDto>>(orders);    
 
