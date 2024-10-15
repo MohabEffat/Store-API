@@ -10,6 +10,8 @@ using Store.Service.Services.BasketService;
 using Store.Repository.Basket;
 using Store.Service.Services.TokenService;
 using Store.Service.Services.UserService;
+using Store.Service.Services.OrderService.DTOs;
+using Store.Service.Services.OrderService;
 
 namespace Store.Web.Extensions
 {
@@ -20,6 +22,7 @@ namespace Store.Web.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(typeof(ProductProfile));
             services.AddAutoMapper(typeof(BasketProfile));
+            services.AddAutoMapper(typeof(OrderProfile));
 
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IBasketRepository, BasketRepository>();
@@ -27,6 +30,7 @@ namespace Store.Web.Extensions
             services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IOrderService, OrderService>();
 
             services.Configure<ApiBehaviorOptions>(options =>
             {
